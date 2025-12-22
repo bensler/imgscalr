@@ -1,6 +1,6 @@
-/**   
+/**
  * Copyright 2011 Riyad Kalla
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,54 +15,55 @@
  */
 package org.imgscalr;
 
-import org.imgscalr.Scalr.Rotation;
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ScalrRotateTest extends AbstractScalrTest {
+import org.imgscalr.Scalr.Rotation;
+import org.junit.jupiter.api.Test;
+
+class ScalrRotateTest extends AbstractScalrTest {
 	@Test
-	public void testRotateEX() {
+	void testRotateEX() {
 		try {
 			Scalr.rotate(src, null);
-			Assert.assertTrue(false);
+			assertTrue(false);
 		} catch (IllegalArgumentException e) {
-			Assert.assertTrue(true);
+			assertTrue(true);
 		}
 	}
 
 	@Test
-	public void testRotate90() {
-		assertEquals(load("time-square-rotate-90.png"),
+	void testRotate90() {
+		assertImgEquals(load("time-square-rotate-90.png"),
 				Scalr.rotate(load("time-square.png"), Rotation.CW_90));
 	}
 
 	@Test
-	public void testRotate180() {
-		assertEquals(load("time-square-rotate-180.png"),
+	void testRotate180() {
+		assertImgEquals(load("time-square-rotate-180.png"),
 				Scalr.rotate(load("time-square.png"), Rotation.CW_180));
 	}
 
 	@Test
-	public void testRotate270() {
-		assertEquals(load("time-square-rotate-270.png"),
+	void testRotate270() {
+		assertImgEquals(load("time-square-rotate-270.png"),
 				Scalr.rotate(load("time-square.png"), Rotation.CW_270));
 	}
 
 	@Test
-	public void testRotateFlipH() {
-		assertEquals(load("time-square-rotate-horz.png"),
+	void testRotateFlipH() {
+		assertImgEquals(load("time-square-rotate-horz.png"),
 				Scalr.rotate(load("time-square.png"), Rotation.FLIP_HORZ));
 	}
 
 	@Test
-	public void testRotateFlipV() {
-		assertEquals(load("time-square-rotate-vert.png"),
+	void testRotateFlipV() {
+		assertImgEquals(load("time-square-rotate-vert.png"),
 				Scalr.rotate(load("time-square.png"), Rotation.FLIP_VERT));
 	}
 
 	@Test
-	public void testRotateFlipHOps() {
-		assertEquals(load("time-square-rotate-horz-ops.png"),
+	void testRotateFlipHOps() {
+		assertImgEquals(load("time-square-rotate-horz-ops.png"),
 				Scalr.rotate(load("time-square.png"), Rotation.FLIP_HORZ,
 						Scalr.OP_GRAYSCALE));
 	}

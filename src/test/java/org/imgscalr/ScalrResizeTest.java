@@ -1,6 +1,6 @@
-/**   
+/**
  * Copyright 2011 Riyad Kalla
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,132 +15,133 @@
  */
 package org.imgscalr;
 
-import java.awt.image.BufferedImage;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import junit.framework.Assert;
+import java.awt.image.BufferedImage;
 
 import org.imgscalr.Scalr.Method;
 import org.imgscalr.Scalr.Mode;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class ScalrResizeTest extends AbstractScalrTest {
+class ScalrResizeTest extends AbstractScalrTest {
 	@Test
-	public void testResizeEX() {
+	void testResizeEX() {
 		try {
 			Scalr.resize(src, -1);
-			Assert.assertTrue(false);
+			assertTrue(false);
 		} catch (IllegalArgumentException e) {
-			Assert.assertTrue(true);
+			assertTrue(true);
 		}
 
 		try {
 			Scalr.resize(src, 240, -1);
-			Assert.assertTrue(false);
+			assertTrue(false);
 		} catch (IllegalArgumentException e) {
-			Assert.assertTrue(true);
+			assertTrue(true);
 		}
 
 		try {
 			Scalr.resize(src, (Method) null, 240);
-			Assert.assertTrue(false);
+			assertTrue(false);
 		} catch (IllegalArgumentException e) {
-			Assert.assertTrue(true);
+			assertTrue(true);
 		}
 
 		try {
 			Scalr.resize(src, (Mode) null, 240);
-			Assert.assertTrue(false);
+			assertTrue(false);
 		} catch (IllegalArgumentException e) {
-			Assert.assertTrue(true);
+			assertTrue(true);
 		}
 
 		try {
 			Scalr.resize(src, (Method) null, 240, 240);
-			Assert.assertTrue(false);
+			assertTrue(false);
 		} catch (IllegalArgumentException e) {
-			Assert.assertTrue(true);
+			assertTrue(true);
 		}
 
 		try {
 			Scalr.resize(src, (Mode) null, 240, 240);
-			Assert.assertTrue(false);
+			assertTrue(false);
 		} catch (IllegalArgumentException e) {
-			Assert.assertTrue(true);
+			assertTrue(true);
 		}
 
 		try {
 			Scalr.resize(src, null, null, 240);
-			Assert.assertTrue(false);
+			assertTrue(false);
 		} catch (IllegalArgumentException e) {
-			Assert.assertTrue(true);
+			assertTrue(true);
 		}
 
 		try {
 			Scalr.resize(src, null, null, 240, 240);
-			Assert.assertTrue(false);
+			assertTrue(false);
 		} catch (IllegalArgumentException e) {
-			Assert.assertTrue(true);
+			assertTrue(true);
 		}
 	}
 
 	@Test
-	public void testResizeSize() {
-		assertEquals(load("time-square-resize-320.png"), Scalr.resize(src, 320));
+	void testResizeSize() {
+		assertImgEquals(load("time-square-resize-320.png"), Scalr.resize(src, 320));
 	}
 
 	@Test
-	public void testResizeWH() {
-		assertEquals(load("time-square-resize-640x480.png"),
+	void testResizeWH() {
+	  assertImgEquals(load("time-square-resize-640x480.png"),
 				Scalr.resize(src, 640, 480));
 	}
 
 	@Test
-	public void testResizeSizeSpeed() {
-		assertEquals(load("time-square-resize-320-speed.png"),
+	void testResizeSizeSpeed() {
+	  assertImgEquals(load("time-square-resize-320-speed.png"),
 				Scalr.resize(src, Method.SPEED, 320));
 	}
 
 	@Test
-	public void testResizeWHSpeed() {
-		assertEquals(load("time-square-resize-640x480-speed.png"),
+	void testResizeWHSpeed() {
+	  assertImgEquals(load("time-square-resize-640x480-speed.png"),
 				Scalr.resize(src, Method.SPEED, 640, 480));
 	}
 
 	@Test
-	public void testResizeSizeExact() {
+	void testResizeSizeExact() {
 		System.setProperty(Scalr.DEBUG_PROPERTY_NAME, "true");
-		assertEquals(load("time-square-resize-320-fit-exact.png"),
+		assertImgEquals(load("time-square-resize-320-fit-exact.png"),
 				Scalr.resize(src, Mode.FIT_EXACT, 320));
 	}
 
 	@Test
-	public void testResizeWHExact() {
-		assertEquals(load("time-square-resize-640x640-fit-exact.png"),
+	void testResizeWHExact() {
+	  assertImgEquals(load("time-square-resize-640x640-fit-exact.png"),
 				Scalr.resize(src, Mode.FIT_EXACT, 640, 640));
 	}
 
 	@Test
-	public void testResizeSizeSpeedExact() {
-		assertEquals(load("time-square-resize-320-speed-fit-exact.png"),
+	void testResizeSizeSpeedExact() {
+	  assertImgEquals(load("time-square-resize-320-speed-fit-exact.png"),
 				Scalr.resize(src, Method.SPEED, Mode.FIT_EXACT, 320));
 	}
 
 	@Test
-	public void testResizeWHSpeedExact() {
-		assertEquals(load("time-square-resize-640x640-speed-fit-exact.png"),
+	void testResizeWHSpeedExact() {
+	  assertImgEquals(load("time-square-resize-640x640-speed-fit-exact.png"),
 				Scalr.resize(src, Method.SPEED, Mode.FIT_EXACT, 640, 640));
 	}
 
 	@Test
-	public void testResizeWHSpeedExactOps() {
-		assertEquals(
+	void testResizeWHSpeedExactOps() {
+	  assertImgEquals(
 				load("time-square-resize-640x640-speed-fit-exact-ops.png"),
 				Scalr.resize(src, Method.SPEED, Mode.FIT_EXACT, 640, 640,
 						Scalr.OP_GRAYSCALE));
 	}
 
 	@Test
-	public void testResizeUltraQuality() {
+	void testResizeUltraQuality() {
 		System.setProperty(Scalr.DEBUG_PROPERTY_NAME, "true");
 		BufferedImage i = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
 		Scalr.resize(i, Method.ULTRA_QUALITY, 1);
@@ -148,20 +149,20 @@ public class ScalrResizeTest extends AbstractScalrTest {
 		// This test is really about having scaling to tiny sizes not looping
 		// forever because of the fractional step-down calculation bottoming
 		// out.
-		Assert.assertTrue(true);
+		assertTrue(true);
 	}
-	
+
 	@Test
-	public void testResizeFitExact() {
+	void testResizeFitExact() {
 		BufferedImage i = new BufferedImage(500, 500, BufferedImage.TYPE_INT_RGB);
 		BufferedImage i2 = Scalr.resize(i, Mode.FIT_EXACT, 500, 250);
-		
-		Assert.assertEquals(i2.getWidth(), 500);
-		Assert.assertEquals(i2.getHeight(), 250);
+
+		assertEquals(i2.getWidth(), 500);
+		assertEquals(i2.getHeight(), 250);
 	}
 
     @Test
-    public void testResizeAutoVsFitBoth() {
+    void testResizeAutoVsFitBoth() {
         // FitBoth will not allow the minor axis to grow beyond the specified box. The four commented
         // tests show how this interacts
 
@@ -205,10 +206,10 @@ public class ScalrResizeTest extends AbstractScalrTest {
         BufferedImage auto = Scalr.resize(i, Mode.AUTOMATIC, targetWidth, targetHeight);
         BufferedImage fitBoth = Scalr.resize(i, Mode.BEST_FIT_BOTH, targetWidth, targetHeight);
 
-        Assert.assertEquals (autoWidth, auto.getWidth());
-        Assert.assertEquals(autoHeight, auto.getHeight());
+        assertEquals (autoWidth, auto.getWidth());
+        assertEquals(autoHeight, auto.getHeight());
 
-        Assert.assertEquals(fitBothWidth, fitBoth.getWidth());
-        Assert.assertEquals(fitBothHeight, fitBoth.getHeight());
+        assertEquals(fitBothWidth, fitBoth.getWidth());
+        assertEquals(fitBothHeight, fitBoth.getHeight());
     }
 }

@@ -1,6 +1,6 @@
-/**   
+/**
  * Copyright 2011 Riyad Kalla
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,25 +15,27 @@
  */
 package org.imgscalr;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
-import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.imageio.ImageIO;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 
-public abstract class AbstractScalrTest {
+abstract class AbstractScalrTest {
 	protected static BufferedImage src;
 
-	@BeforeClass
-	public static void setup() throws IOException {
+	@BeforeAll
+	static void setup() {
 		src = load("time-square.png");
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void tearDown() {
 		src.flush();
 	}
@@ -58,24 +60,26 @@ public abstract class AbstractScalrTest {
 		}
 	}
 
-	protected static void assertEquals(BufferedImage orig, BufferedImage tmp)
+	protected static void assertImgEquals(BufferedImage orig, BufferedImage tmp)
 			throws AssertionError {
 		// Ensure neither image is null.
-		Assert.assertNotNull(orig);
-		Assert.assertNotNull(tmp);
+		assertNotNull(orig);
+		assertNotNull(tmp);
 
 		// Ensure dimensions are equal.
-		Assert.assertEquals(orig.getWidth(), tmp.getWidth());
-		Assert.assertEquals(orig.getHeight(), tmp.getHeight());
+		assertEquals(orig.getWidth(), tmp.getWidth());
+		assertEquals(orig.getHeight(), tmp.getHeight());
 
 		int w = orig.getWidth();
 		int h = orig.getHeight();
-
+		AtomicInteger goodPxels = new AtomicInteger();
+		AtomicInteger badPxels = new AtomicInteger();
 		// Ensure every RGB pixel value is the same.
 		for (int i = 0; i < w; i++) {
 			for (int j = 0; j < h; j++) {
-				Assert.assertEquals(orig.getRGB(i, j), tmp.getRGB(i, j));
+			  (((orig.getRGB(i, j) == tmp.getRGB(i, j))) ? goodPxels : badPxels).incrementAndGet();
 			}
 		}
+		assertEquals(0, badPxels.get(), "%s of %s pixels are different".formatted(badPxels.get(), w * h));
 	}
 }

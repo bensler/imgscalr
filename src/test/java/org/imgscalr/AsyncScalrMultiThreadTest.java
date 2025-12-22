@@ -1,6 +1,6 @@
-/**   
+/**
  * Copyright 2011 Riyad Kalla
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,20 +15,21 @@
  */
 package org.imgscalr;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * The purpose of this test is to execute simultaneous scale operations on a
  * very small picture as quickly as possible to try and cause a dead-lock.
- * 
+ *
  * @author Riyad Kalla (software@thebuzzmedia.com)
  */
-public class AsyncScalrMultiThreadTest extends AbstractScalrTest {
+class AsyncScalrMultiThreadTest extends AbstractScalrTest {
 	private static int ITERS = 100000;
 	private static BufferedImage ORIG;
 
@@ -38,9 +39,9 @@ public class AsyncScalrMultiThreadTest extends AbstractScalrTest {
 	}
 
 	@Test
-	public void test() throws InterruptedException {
-		List<Thread> threadList = new ArrayList<Thread>(ITERS);
-		
+	void test() throws InterruptedException {
+		List<Thread> threadList = new ArrayList<>(ITERS);
+
 		for (int i = 0; i < ITERS; i++) {
 			if (i % 100 == 0)
 				System.out.println("Scale Iteration " + i);
@@ -55,7 +56,7 @@ public class AsyncScalrMultiThreadTest extends AbstractScalrTest {
 				break;
 			}
 		}
-		
+
 		// Now wait for all the threads to finish
 		for (int i = 0; i < ITERS; i++) {
 			if (i % 100 == 0)
@@ -63,12 +64,12 @@ public class AsyncScalrMultiThreadTest extends AbstractScalrTest {
 
 			threadList.get(i).join();
 		}
-		
+
 		// Make sure we finish with no exceptions.
-		Assert.assertTrue(true);
+		assertTrue(true);
 	}
 
-	public class ScaleThread extends Thread {
+	class ScaleThread extends Thread {
 		@Override
 		public void run() {
 			try {

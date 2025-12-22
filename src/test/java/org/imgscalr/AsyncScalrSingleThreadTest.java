@@ -1,6 +1,6 @@
-/**   
+/**
  * Copyright 2011 Riyad Kalla
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,18 +15,19 @@
  */
 package org.imgscalr;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.awt.image.BufferedImage;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * The purpose of this test is to execute simultaneous scale operations on a
  * very small picture as quickly as possible to try and cause a dead-lock.
- * 
+ *
  * @author Riyad Kalla (software@thebuzzmedia.com)
  */
-public class AsyncScalrSingleThreadTest extends AbstractScalrTest {
+class AsyncScalrSingleThreadTest extends AbstractScalrTest {
 	private static int ITERS = 100000;
 	private static BufferedImage ORIG;
 
@@ -36,7 +37,7 @@ public class AsyncScalrSingleThreadTest extends AbstractScalrTest {
 	}
 
 	@Test
-	public void test() throws InterruptedException {
+	void test() throws InterruptedException {
 		for (int i = 0; i < ITERS; i++) {
 			if (i % 100 == 0)
 				System.out.println("Scale Iteration " + i);
@@ -50,12 +51,12 @@ public class AsyncScalrSingleThreadTest extends AbstractScalrTest {
 			 */
 			t.join();
 		}
-		
+
 		// Make sure we finish with no exceptions.
-				Assert.assertTrue(true);
+		assertTrue(true);
 	}
 
-	public class ScaleThread extends Thread {
+	class ScaleThread extends Thread {
 		@Override
 		public void run() {
 			try {
