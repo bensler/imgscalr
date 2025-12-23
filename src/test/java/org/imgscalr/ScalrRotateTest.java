@@ -15,20 +15,15 @@
  */
 package org.imgscalr;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.imgscalr.Scalr.Rotation;
 import org.junit.jupiter.api.Test;
 
 class ScalrRotateTest extends AbstractScalrTest {
 	@Test
-	void testRotateEX() {
-		try {
-			Scalr.rotate(src, null);
-			assertTrue(false);
-		} catch (IllegalArgumentException e) {
-			assertTrue(true);
-		}
+	void testRotateEx() {
+	  assertThrows(IllegalArgumentException.class, ()-> Scalr.rotate(src, null));
 	}
 
 	@Test

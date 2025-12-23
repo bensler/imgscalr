@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.awt.image.BufferedImage;
-import java.io.FileOutputStream;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.imageio.ImageIO;
@@ -28,7 +27,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
 abstract class AbstractScalrTest {
-	protected static BufferedImage src;
+
+  protected static BufferedImage src;
 
 	@BeforeAll
 	static void setup() {
@@ -41,22 +41,10 @@ abstract class AbstractScalrTest {
 	}
 
 	protected static BufferedImage load(String name) {
-		BufferedImage i = null;
-
 		try {
-			i = ImageIO.read(AbstractScalrTest.class.getResource(name));
+			return ImageIO.read(AbstractScalrTest.class.getResource(name));
 		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return i;
-	}
-
-	protected static void save(BufferedImage image, String name) {
-		try {
-			ImageIO.write(image, "PNG", new FileOutputStream(name));
-		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 

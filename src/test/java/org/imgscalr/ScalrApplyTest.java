@@ -20,7 +20,7 @@ import static org.imgscalr.Scalr.OP_BRIGHTER;
 import static org.imgscalr.Scalr.OP_DARKER;
 import static org.imgscalr.Scalr.OP_GRAYSCALE;
 import static org.imgscalr.Scalr.apply;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.awt.image.BufferedImageOp;
 
@@ -28,13 +28,8 @@ import org.junit.jupiter.api.Test;
 
 class ScalrApplyTest extends AbstractScalrTest {
 	@Test
-	void testApplyEX() {
-		try {
-			apply(src, (BufferedImageOp[]) null);
-			assertTrue(false);
-		} catch (Exception e) {
-			assertTrue(true);
-		}
+	void testApplyEx() {
+	  assertThrows(IllegalArgumentException.class, () -> apply(src, (BufferedImageOp[]) null));
 	}
 
 	@Test

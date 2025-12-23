@@ -16,6 +16,7 @@
 package org.imgscalr;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
@@ -26,62 +27,15 @@ import org.junit.jupiter.api.Test;
 
 class ScalrResizeTest extends AbstractScalrTest {
 	@Test
-	void testResizeEX() {
-		try {
-			Scalr.resize(src, -1);
-			assertTrue(false);
-		} catch (IllegalArgumentException e) {
-			assertTrue(true);
-		}
-
-		try {
-			Scalr.resize(src, 240, -1);
-			assertTrue(false);
-		} catch (IllegalArgumentException e) {
-			assertTrue(true);
-		}
-
-		try {
-			Scalr.resize(src, (Method) null, 240);
-			assertTrue(false);
-		} catch (IllegalArgumentException e) {
-			assertTrue(true);
-		}
-
-		try {
-			Scalr.resize(src, (Mode) null, 240);
-			assertTrue(false);
-		} catch (IllegalArgumentException e) {
-			assertTrue(true);
-		}
-
-		try {
-			Scalr.resize(src, (Method) null, 240, 240);
-			assertTrue(false);
-		} catch (IllegalArgumentException e) {
-			assertTrue(true);
-		}
-
-		try {
-			Scalr.resize(src, (Mode) null, 240, 240);
-			assertTrue(false);
-		} catch (IllegalArgumentException e) {
-			assertTrue(true);
-		}
-
-		try {
-			Scalr.resize(src, null, null, 240);
-			assertTrue(false);
-		} catch (IllegalArgumentException e) {
-			assertTrue(true);
-		}
-
-		try {
-			Scalr.resize(src, null, null, 240, 240);
-			assertTrue(false);
-		} catch (IllegalArgumentException e) {
-			assertTrue(true);
-		}
+	void testResizeEx() {
+	  assertThrows(IllegalArgumentException.class, ()-> Scalr.resize(src, -1));
+		assertThrows(IllegalArgumentException.class, ()-> Scalr.resize(src, 240, -1));
+		assertThrows(IllegalArgumentException.class, ()-> Scalr.resize(src, (Method) null, 240));
+		assertThrows(IllegalArgumentException.class, ()-> Scalr.resize(src, (Mode) null, 240));
+		assertThrows(IllegalArgumentException.class, ()-> Scalr.resize(src, (Method) null, 240, 240));
+		assertThrows(IllegalArgumentException.class, ()-> Scalr.resize(src, (Mode) null, 240, 240));
+		assertThrows(IllegalArgumentException.class, ()-> Scalr.resize(src, null, null, 240));
+		assertThrows(IllegalArgumentException.class, ()-> Scalr.resize(src, null, null, 240, 240));
 	}
 
 	@Test

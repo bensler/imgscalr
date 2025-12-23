@@ -15,7 +15,7 @@
  */
 package org.imgscalr;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.awt.Color;
 
@@ -28,19 +28,8 @@ class ScalrPadTest extends AbstractScalrTest {
 
 	@Test
 	void testPadEX() {
-		try {
-			Scalr.pad(src, -1);
-			assertTrue(false);
-		} catch (IllegalArgumentException ex) {
-			assertTrue(true);
-		}
-
-		try {
-			Scalr.pad(src, 0);
-			assertTrue(false);
-		} catch (IllegalArgumentException ex) {
-			assertTrue(true);
-		}
+	  assertThrows(IllegalArgumentException.class, () -> Scalr.pad(src, -1));
+	  assertThrows(IllegalArgumentException.class, () -> Scalr.pad(src, 0));
 	}
 
 	@Test

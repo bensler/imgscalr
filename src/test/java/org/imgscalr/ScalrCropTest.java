@@ -16,33 +16,16 @@
 package org.imgscalr;
 
 import static org.imgscalr.Scalr.crop;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 class ScalrCropTest extends AbstractScalrTest {
 	@Test
-	void testCropEX() {
-		try {
-			crop(src, 3200, 2400);
-			assertTrue(false);
-		} catch (Exception e) {
-			assertTrue(true);
-		}
-
-		try {
-			crop(src, -8, -10, 100, 100);
-			assertTrue(false);
-		} catch (Exception e) {
-			assertTrue(true);
-		}
-
-		try {
-			crop(src, -100, -200, -4, -4);
-			assertTrue(false);
-		} catch (Exception e) {
-			assertTrue(true);
-		}
+	void testCropEx() {
+	  assertThrows(IllegalArgumentException.class, ()-> crop(src, 3200, 2400));
+	  assertThrows(IllegalArgumentException.class, ()-> crop(src, -8, -10, 100, 100));
+		assertThrows(IllegalArgumentException.class, ()-> crop(src, -100, -200, -4, -4));
 	}
 
 	@Test
