@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.imageio.ImageIO;
 
@@ -54,6 +55,19 @@ abstract class AbstractScalrTest {
 		}
 	}
 
+	private static void checkSinglePixel(Color origColor, Color tmpColor , AtomicInteger alphaDiff, List<Integer> colorDiffs) {
+    if (!origColor.equals(tmpColor)) {
+      if (origColor.getAlpha() != tmpColor.getAlpha()) {
+        alphaDiff.incrementAndGet();
+      }
+      colorDiffs.add(
+          Math.abs(origColor.getRed()   - tmpColor.getRed())
+        + Math.abs(origColor.getGreen() - tmpColor.getGreen())
+        + Math.abs(origColor.getBlue()  - tmpColor.getBlue())
+      );
+    }
+  }
+
 	protected static void assertImgEquals(BufferedImage orig, BufferedImage tmp) {
 	  final int w = orig.getWidth();
 	  final int h = orig.getHeight();
@@ -65,23 +79,9 @@ abstract class AbstractScalrTest {
 		assertEquals(h, tmp.getHeight());
 
 		// Ensure every RGB pixel value is the same.
-		for (int x = 0; x < w; x++) {
-			for (int y = 0; y < h; y++) {
-			  final Color origColor = new Color(orig.getRGB(x, y));
-			  final Color tmpColor = new Color(tmp.getRGB(x, y));
-
-        if (!origColor.equals(tmpColor)) {
-          if (origColor.getAlpha() != tmpColor.getAlpha()) {
-            alphaDiff.incrementAndGet();
-          }
-			    colorDiffs.add(
-			        Math.abs(origColor.getRed()   - tmpColor.getRed())
-		        + Math.abs(origColor.getGreen() - tmpColor.getGreen())
-		        + Math.abs(origColor.getBlue()  - tmpColor.getBlue())
-	        );
-			  }
-			}
-		}
+		IntStream.range(0, w).forEach(x -> IntStream.range(0, h).forEach(y -> checkSinglePixel(
+	    new Color(orig.getRGB(x, y)), new Color(tmp.getRGB(x, y)), alphaDiff, colorDiffs
+    )));
 		if (colorDiffs.size() > 0) {
 		  final Map<Integer, Integer> colorDiffHistogram = colorDiffs.stream().collect(Collectors.toMap(intValue -> intValue, intValue -> 1, (v1, v2) -> v1 + v2));
 		  assertionFailure().message(
@@ -94,4 +94,5 @@ abstract class AbstractScalrTest {
       ).buildAndThrow();
 		}
 	}
+
 }
