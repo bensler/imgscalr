@@ -15,11 +15,17 @@
  */
 package org.imgscalr;
 
+import static org.junit.jupiter.api.AssertionFailureBuilder.assertionFailure;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
@@ -48,26 +54,44 @@ abstract class AbstractScalrTest {
 		}
 	}
 
-	protected static void assertImgEquals(BufferedImage orig, BufferedImage tmp)
-			throws AssertionError {
-		// Ensure neither image is null.
-		assertNotNull(orig);
-		assertNotNull(tmp);
+	protected static void assertImgEquals(BufferedImage orig, BufferedImage tmp) {
+	  final int w = orig.getWidth();
+	  final int h = orig.getHeight();
+	  final int pxCount = w * h;
+	  final AtomicInteger alphaDiff = new AtomicInteger();
+	  final List<Integer> colorDiffs = new ArrayList<>(pxCount);
 
-		// Ensure dimensions are equal.
-		assertEquals(orig.getWidth(), tmp.getWidth());
-		assertEquals(orig.getHeight(), tmp.getHeight());
+		assertEquals(w, tmp.getWidth());
+		assertEquals(h, tmp.getHeight());
 
-		int w = orig.getWidth();
-		int h = orig.getHeight();
-		AtomicInteger goodPxels = new AtomicInteger();
-		AtomicInteger badPxels = new AtomicInteger();
 		// Ensure every RGB pixel value is the same.
-		for (int i = 0; i < w; i++) {
-			for (int j = 0; j < h; j++) {
-			  (((orig.getRGB(i, j) == tmp.getRGB(i, j))) ? goodPxels : badPxels).incrementAndGet();
+		for (int x = 0; x < w; x++) {
+			for (int y = 0; y < h; y++) {
+			  final Color origColor = new Color(orig.getRGB(x, y));
+			  final Color tmpColor = new Color(tmp.getRGB(x, y));
+
+        if (!origColor.equals(tmpColor)) {
+          if (origColor.getAlpha() != tmpColor.getAlpha()) {
+            alphaDiff.incrementAndGet();
+          }
+			    colorDiffs.add(
+			        Math.abs(origColor.getRed()   - tmpColor.getRed())
+		        + Math.abs(origColor.getGreen() - tmpColor.getGreen())
+		        + Math.abs(origColor.getBlue()  - tmpColor.getBlue())
+	        );
+			  }
 			}
 		}
-		assertEquals(0, badPxels.get(), "%s of %s pixels are different".formatted(badPxels.get(), w * h));
+		if (colorDiffs.size() > 0) {
+		  final Map<Integer, Integer> colorDiffHistogram = colorDiffs.stream().collect(Collectors.toMap(intValue -> intValue, intValue -> 1, (v1, v2) -> v1 + v2));
+		  assertionFailure().message(
+	      "\n%s of %s pixels are different (in alpha: %s)\nrgb distance count:\n%s".formatted(
+          colorDiffs.size(), pxCount, alphaDiff.get(),
+          colorDiffHistogram.entrySet().stream().sorted(
+            (e1, e2) -> e1.getKey().compareTo(e2.getKey())
+          ).map(Entry::toString).collect(Collectors.joining("\n"))
+        )
+      ).buildAndThrow();
+		}
 	}
 }
